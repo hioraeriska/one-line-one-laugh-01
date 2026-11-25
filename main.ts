@@ -8,11 +8,15 @@ import { join } from "node:path";
 const JOKE =
   "My microwave beeps when the food is done, then beeps again every minute, like a tiny manager who thinks I forgot I was hungry.";
 
-// The gate accepts 1-200 characters of non-whitespace text only. Refuse to
-// write an invalid entry instead of silently scoring 0.
+// The gate accepts 1-200 characters of non-whitespace text only, and the
+// entry must be exactly one line. Refuse to write an invalid entry instead
+// of silently scoring 0.
 const chars = [...JOKE].length;
 if (chars < 1 || chars > 200 || JOKE.trim().length === 0) {
   throw new Error(`joke is ${chars} chars, outside the 1-200 gate`);
+}
+if (JOKE.includes("\n") || JOKE.includes("\r")) {
+  throw new Error("joke must be a single line");
 }
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
